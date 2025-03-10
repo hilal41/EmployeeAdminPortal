@@ -21,7 +21,6 @@ namespace EmployeeAdminPortal.Controllers
         [HttpGet]
         public IActionResult GetAllEmployee()
         {
-          
 
             return Ok(dbContext.Employees.ToList());
         }
@@ -29,7 +28,8 @@ namespace EmployeeAdminPortal.Controllers
         [HttpGet]
         [Route("{id:guid}")]
 
-        public IActionResult GetEmployeebyeId(Guid id) {
+        public IActionResult GetEmployeebyeId(Guid id)
+        {
 
             var employee = dbContext.Employees.Find(id);
             if (employee == null)
@@ -38,10 +38,6 @@ namespace EmployeeAdminPortal.Controllers
             }
             return Ok(employee);
         }
-
-
-
-
 
         [HttpPost]
         public IActionResult AddEmployee(addEmployeeDto addEmployeeDto)
@@ -66,5 +62,51 @@ namespace EmployeeAdminPortal.Controllers
             dbContext.SaveChanges();
             return Ok(employee);
         }
+
+        [HttpPut]
+
+        [Route("{id:guid}")]
+        public IActionResult UpdateEmployee(Guid id, addEmployeeDto addEmployeeDto)
+        {
+            var employee = dbContext.Employees.Find(id);
+            if (employee == null)
+            {
+                return NotFound("Employee Not Found");
+            }
+
+            employee.Name = addEmployeeDto.Name;
+            employee.Email = addEmployeeDto.Email;
+            employee.PhoneNumber = addEmployeeDto.PhoneNumber;
+            employee.salary = addEmployeeDto.salary;
+
+
+            dbContext.SaveChanges();
+            return Ok(employee);
+        }
+
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public IActionResult deleteEmployee(Guid id)
+        {
+            var employee = dbContext.Employees.Find(id);
+
+            if (employee == null)
+            {
+                return NotFound("Employee Not Found");
+            }
+
+            dbContext.Employees.Remove(employee);
+            dbContext.SaveChanges();
+            return Ok("Employee Deleted Successfully");
+
+        }
+
+
+
+
+
+
+
+
     }
-} 
+}
